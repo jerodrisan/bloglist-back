@@ -1,0 +1,34 @@
+1. creamos local git repository : git init
+1. crear directorio y luego npm init para generar los archivos necesarios 
+2. una vez creado el package.json , en scripts ponemos "start": "node index.js", (aparte del test)
+3. creamos index.js con un console.log("helo") y ya podemos arrancar con node index.js o npm start
+4. instalamos express : npm install express y actualizamos dependencias con npm update
+5. si abrimos el proyecto en otro pc , podemos instalar las dependencias con npm install 
+6 instalamos nodemon: npm install --save-dev nodemon
+7. en el package.json añadimos en scrips: "dev": "nodemon index.js",  De esta forma arrancamos con npm run dev
+
+8. para crear cliente rest , creamos un archivo .rest (ejemplo get_info.rest) :
+
+GET http://localhost:3001/api/notes/
+
+###
+POST http://localhost:3001/api/notes/ HTTP/1.1
+content-type: application/json
+
+{
+    "name": "sample",
+    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
+}
+
+9.instalar cors por si se hace un front local no haya same-origin policy
+npm install cors
+const cors = require('cors')
+app.use(cors())
+
+
+9. instalar mongoose: npm install mongoose
+10. creamos un archivo .env :
+
+    MONGODB_URI=mongodb+srv://polirodriron:dWfr082Q1o7WfACk@cluster0.pthwzwl.mongodb.net/phonebookApp?retryWrites=true&w=majority
+    PORT=3001
+  
