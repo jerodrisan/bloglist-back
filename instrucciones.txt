@@ -26,12 +26,20 @@ app.use(cors())
 
 
 10. instalar mongoose: npm install mongoose
-12. Instalamos libreria dotenv :npm install dotenv
+11. Instalamos libreria dotenv :npm install dotenv
 
-11. creamos un archivo .env :
+12. creamos un archivo .env :
 
     MONGODB_URI=mongodb+srv://polirodriron:dWfr082Q1o7WfACk@cluster0.pthwzwl.mongodb.net/phonebookApp?retryWrites=true&w=majority
     PORT=3001
 
-
-  
+----------------------------------------------------------------
+13. Para testing: npm install --save-dev jest
+    Incluimos en el script del package.json 
+    Y ademas añadimos al final del package.json: 
+    {
+    //...
+    "jest": {
+        "testEnvironment": "node"
+    }
+    }
