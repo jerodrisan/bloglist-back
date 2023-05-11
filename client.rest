@@ -1,0 +1,12 @@
+GET http://localhost:3003/api/blogs/
+
+###
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Blog for golf",
+    "author": "pepe asdf",
+    "url": "www.porns.com",
+    "likes": 6
+}
