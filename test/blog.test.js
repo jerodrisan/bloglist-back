@@ -42,4 +42,23 @@ describe('favorite blog', ()=>{
         expect(result).toEqual(obj)
     })  
 
+    test('Author with largest number of blogs', ()=>{
+        const obj = {            
+            blogs: 3,
+            author: "Robert C. Martin"              
+        }
+        const result = listHelper.mostBlogs(array_blogs)
+        expect(result).toEqual(obj)
+    })
+
+    //NO sale este test 
+    test('Author whose blog posts have the largest amount of likes', ()=>{
+        const objeto={                
+                author: "Edsger W. Dijkstra",
+                likes: 17           
+            }
+            const result = listHelper.mostLikes(array_blogs)
+            expect(result).toEqual(objeto)
+        
+    })
 })
