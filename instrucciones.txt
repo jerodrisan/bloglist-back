@@ -34,7 +34,11 @@ app.use(cors())
     PORT=3001
 
 ----------------------------------------------------------------
-13. Para testing: npm install --save-dev jest
+13. /*
+dependencias a instalar en esta rama: 
+npm install --save-dev cross-env
+npm install --save-dev supertest //para los supertest
+Para testing: npm install --save-dev jest
     Incluimos en el script del package.json 
     Y ademas añadimos al final del package.json: 
     {
@@ -43,3 +47,5 @@ app.use(cors())
         "testEnvironment": "node"
     }
     }
+
+*/

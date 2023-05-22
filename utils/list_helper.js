@@ -1,10 +1,11 @@
-const blogs = require('../test/array_blogs')
+const blogs = require('../tests/array_blogs')
 
 const dummy = (blogs) => {
     return 1
 }
 
 const totalLikes = (blogs) => blogs.length=== 0 ? 0 : blogs.reduce((total, blog) => total + blog.likes,0)
+
 
 const favoriteBlog = (blogs) =>{    
     const max =  Math.max(...blogs.map(blog=>blog.likes))
@@ -38,6 +39,9 @@ const mostBlogs = (blogs) =>{
     const author = arr.find(ar=>ar.blogs===max)       
     return author    
   }
+
+
+
 
   //Author whose blog posts have the largest amount of likes
   const mostLikes = (blogs) =>{

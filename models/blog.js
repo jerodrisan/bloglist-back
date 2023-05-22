@@ -13,6 +13,7 @@ const blogSchema = new mongoose.Schema({
     likes: Number
   })
   
+  //metodo que usareoms posteriormente para recibir los datos tal y como queremos (ejm: blog.toJSON() )
   blogSchema.set('toJSON', {
     transform: (document, returnedObject) => {
       returnedObject.id = returnedObject._id.toString()
@@ -20,7 +21,7 @@ const blogSchema = new mongoose.Schema({
       delete returnedObject.__v
     }
   })
-  
+
   module.exports = mongoose.model('Blog', blogSchema)
 
 

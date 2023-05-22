@@ -25,3 +25,5 @@ app.use('/api/blogs',blogsRouter)
 app.listen(config.PORT, () => {
   console.log(`Server running on port ${config.PORT}`)
 })
+
+module.exports=app
