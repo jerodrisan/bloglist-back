@@ -30,8 +30,6 @@ beforeEach(async () => {
 })
 
 
-
-
 //4.8: Blog list tests, step1
 test('blogs in JSON format is correct', async()=>{
     const blogs = await Blog.find({})      
@@ -40,8 +38,6 @@ test('blogs in JSON format is correct', async()=>{
     expect(resultBlogs.body).toEqual(blogsToView)
 
 })
-
-
 
 
 
@@ -99,8 +95,6 @@ test('verifies that if the likes property is missing from the request, it will d
 })
 
 
-
-
 //4.12*: Blog list tests, step5
 //verify that if the title or url properties are missing from the request data, the backend responds to the request with the status code 400 Bad Request.
 
@@ -114,6 +108,46 @@ test('missing title or url properties backend respond with status 404' , async()
     .post('/api/blogs/')
     .send(newBlog)
     .expect(400)   
+})
+
+
+test('delete one contact from de blog', async ()=>{
+    //a. pillamos primer elemento del blog(por ejemplo), sacamos id y borramos. 
+    //b. comprobamos que el blog tiene 1 elemento menos y que el elemento borrado no esta en el blog
+    const blogsAtStart = await Blog.find({})
+    const elem = blogsAtStart[0].toJSON()
+    const id = elem.id   
+
+    await api
+    .delete(`/api/blogs/${id}`)
+    .expect(204)
+
+    const blogsAtEnd = await Blog.find({})
+    const titulos = blogsAtEnd.map(blog => (blog.toJSON()).title) //sacamos un array de todos los titulos   
+    expect(titulos).not.toContain(elem.title)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length-1)
+
+})
+
+
+
+test('uptdate the number of likes for a blog post' , async()=>{
+
+    const blogsAtStart = await Blog.find({})
+    const elem = blogsAtStart[0].toJSON()
+    const id = elem.id   
+    const likes = {
+        likes: 58
+    }
+
+    await api
+    .put(`/api/blogs/${id}`)
+    .send(likes)
+    .expect(204)
+
+    const blogsAtEnd = await Blog.find({})
+    const elemEnd = blogsAtEnd[0].toJSON()
+    expect(elemEnd.likes).toEqual(58)
 })
 
 
