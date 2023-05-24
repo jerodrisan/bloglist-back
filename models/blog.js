@@ -10,7 +10,12 @@ const blogSchema = new mongoose.Schema({
     title: String,
     author: String,
     url: String,
-    likes: Number
+    likes: Number,
+   // user:String, 
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
   })
   
   //metodo que usareoms posteriormente para recibir los datos tal y como queremos (ejm: blog.toJSON() )
