@@ -12,19 +12,32 @@ usersRouter.get('/', async (request, response) => {
   })
 
 
-usersRouter.post('/', async (request, response) => {
+usersRouter.post('/', async (request, response, next) => {
 
   const { username, name, password } = request.body
-  const saltRounds = 10
-  const passwordHash = await bcrypt.hash(password, saltRounds)
 
-  const user = new User({
-    username,
-    name,
-    passwordHash,
-  })
-  const savedUser = await user.save()
-  response.status(201).json(savedUser)
+  if(!(request.body).hasOwnProperty('password') || password ==='' ) {
+      response.status(400).json({error:"password incorrect"})
+  }else {
+    if(password.length<=3){
+      response.status(400).json({error:"password lengght must be more than 3 length"})
+    }else{      
+      const saltRounds = 10
+      const passwordHash = await bcrypt.hash(password, saltRounds)    
+      const user = new User({
+        username,
+        name,
+        passwordHash,
+      })
+      try{
+        const savedUser = await user.save()
+        response.status(201).json(savedUser)
+      }catch(error){       
+        next(error)
+      } 
+    }
+  }
+ 
 })
 
 

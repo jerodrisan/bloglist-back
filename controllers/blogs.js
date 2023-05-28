@@ -9,13 +9,9 @@ blogsRouter.get('/', async(request, response) => {
     //const blogs = await Blog.find({})
     const blogs = await Blog.find({}).populate('user', { username: 1, name:1 }) //en este caso usamos en el esquema 
     //Sin salida formateada:
-    //response.json(blogs)
-    
-    //Si queremos ver la salida formateada: 
-    const JSON_blogs = JSON.stringify(blogs)
-    const obj_blogs = JSON.parse(JSON_blogs)
-    //console.log(obj_blogs)
-    let str = jsonFormatter(obj_blogs)    
+    //response.json(blogs)    
+    //Si queremos ver la salida formateada:     
+    let str = jsonFormatter(blogs)    
     response.send(str)    
   })
 
@@ -42,7 +38,7 @@ blogsRouter.get('/', async(request, response) => {
 
     let body = request.body  
     if(!body.hasOwnProperty('title') || !body.hasOwnProperty('url')){
-      response.status(400).send('Bad Request') //en caso de que no esten las pop
+      response.status(400).send('Bad Request') //en caso de que no esten las props
     }else{ 
 
       const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)

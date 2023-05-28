@@ -1,6 +1,9 @@
 //Formateador de json para ver los datos en pantalla 
 
-const format = contactos =>{
+const format = blogs =>{
+
+    const JSON_blogs = JSON.stringify(blogs)  
+    const contactos = JSON.parse(JSON_blogs)    
     let str ="[<br>"     
     for (let i=0; i<contactos.length; i++){
         let keys = Object.keys(contactos[i])
