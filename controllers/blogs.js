@@ -21,11 +21,9 @@ blogsRouter.get('/', async(request, response) => {
     "title":  "third blob via HTTP adsaf",
      "author": "pepe perez",
      "url":    "www.as.com",
-     "likes": 10 ,
-     "userId": "646e575d5eb733b256be8d67"     //id del usuario que creo el blog
+     "likes": 10     
   }
   */
-
   const getTokenFrom = request => {
     const authorization = request.get('authorization')
     if (authorization && authorization.startsWith('Bearer ')) {
@@ -34,45 +32,74 @@ blogsRouter.get('/', async(request, response) => {
     return null
   } 
 
-  blogsRouter.post('/', async (request, response) => {    
 
+
+
+  blogsRouter.post('/', async (request, response,next ) => {    
+   
     let body = request.body  
     if(!body.hasOwnProperty('title') || !body.hasOwnProperty('url')){
       response.status(400).send('Bad Request') //en caso de que no esten las props
     }else{ 
+      try{
+       // const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET) //En caso de usar la funcion getTokenFrom
+        const decodedToken = jwt.verify(request.token, process.env.SECRET) //usaremos el middleware tokenExtractor para sacar el token 
+        if (!decodedToken.id) {
+          return response.status(401).json({ error: 'usuario invalido' })
+        }
+        const user = await User.findById(decodedToken.id) //pillamos el usuario cuya id se encuentra identificada en el token      
 
-      const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
-      if (!decodedToken.id) {
-        return response.status(401).json({ error: 'token invalid' })
+        const blog = new Blog({
+          title:body.title,
+          author:body.author,
+          url:body.url,        
+          user:user.id
+        })
+        blog.likes = !body.hasOwnProperty('likes') ? 0 : body.likes      //en caso que no este la propiedad likes, ponemos likes a cero
+
+        const savedBlog = await new Blog(blog).save()//guardamos el blog 
+        user.blogs = user.blogs.concat(savedBlog._id) //metemos la id del blog en el usuario y lo guardamos
+        await user.save()
+        response.status(201).json(savedBlog) //devuelve el contacto guardado.      
+     }catch(error){
+        next(error)//sacamos el error del JsonWebTokenError en caso de que sea erroneo
       }
-      const user = await User.findById(decodedToken.id) //pillamos el usuario cuya id se encuentra identificada en el token      
-      const blog = new Blog({
-        title:body.title,
-        author:body.author,
-        url:body.url,        
-        user:user.id
-      })
-      blog.likes = !body.hasOwnProperty('likes') ? 0 : body.likes      //en caso que no este la propiedad likes, ponemos likes a cero
-
-      const savedBlog = await new Blog(blog).save()//guardamos el blog 
-      user.blogs = user.blogs.concat(savedBlog._id) //metemos la id del blog en el usuario y lo guardamos
-      await user.save()
-      response.status(201).json(savedBlog) //devuelve el contacto guardado.      
     }   
   })
 
 
 
 
-  
-  blogsRouter.delete('/:id', async (request, response)=>{
+  //Solo el usuario que añadio el blog, puede borrarlo, por lo tanto:
+  //1. Nos logamos como usuario registrado y obtenemos el token
+  //2. Ponemos el token en la cabecera en Authorized
+  //3. POnemos la id del blog que queremos borrar y mandamos el DELETE 
+  blogsRouter.delete('/:id', async (request, response, next)=>{    
+    
     try{
-      await Blog.findByIdAndRemove(request.params.id)
-      response.status(204).end()
-    }catch(exception){
-      console.log(excepcion)
+      
+      const decodedToken = jwt.verify(request.token, process.env.SECRET) //usaremos el middleware tokenExtractor para sacar el token     
+      if (!decodedToken.id) {
+        return response.status(401).json({ error: 'usuario invalido' }) 
+      }    
+      const userId = decodedToken.id //sacamos la id del usuario que ha iniciado la sesion .       
+      const user = await User.findById(userId)  //devuelve solo las ids            
+      const userBlogs = user.blogs.map(blog=>blog.toJSON()) //pasamos las ids de objetos a strings       
+      if(userBlogs.find(item=>item===request.params.id)){        //Borramos el blog        
+        try{
+          await Blog.findByIdAndRemove(request.params.id)
+          response.status(204).end()
+        }catch(error){
+            console.log(error)
+        }      
+      }else{
+        console.log('blog no encontrado')
+      }                
+    }catch(error){  //sacamos el error del JsonWebTokenError en caso de que sea erroneo
+      next(error)    
     }
   })
+
 
 
   blogsRouter.put('/:id', async(request, response)=>{
@@ -89,7 +116,7 @@ blogsRouter.get('/', async(request, response) => {
   })
 
 
-  /* Esto iria en otra carpeta
+  /* Esto iria en carpeta de middleware
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message)
 
@@ -106,7 +133,6 @@ const errorHandler = (error, request, response, next) => {
       error: 'token expired'
     })
   }
-
   next(error)
 }
 }*/

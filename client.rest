@@ -13,15 +13,19 @@ Content-Type: application/json
 
 ###
 POST http://localhost:3003/api/blogs/ HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlcGUiLCJpZCI6IjY0NmY5ODQwMTdiNGI4YmMxYTRiZTU2NiIsImlhdCI6MTY4NTAzOTE4MH0.gPAQX47BXUwJ3otgjIK7ggRFV--RBuYuEw2GWL4-koA
+Content-Type: application/json    
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlcGUiLCJpZCI6IjY0NmY5ODQwMTdiNGI4YmMxYTRiZTU2NiIsImlhdCI6MTY4NTQ4MzcyOSwiZXhwIjoxNjg1NTcwMTI5fQ.duO_vK1SMJ3aN1hgaL-8TyPEIU0E92JNg7Axm2T3t3Q
 
 {
-    "title": "Blog for golf",
+    "title": "Blog del gugug",
     "author": "pepe asdf",
     "url": "www.porns.com",
     "likes": 6
 }
+
+###
+DELETE http://localhost:3003/api/blogs/647673fe8f3e22001be82225 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlcGUiLCJpZCI6IjY0NmY5ODQwMTdiNGI4YmMxYTRiZTU2NiIsImlhdCI6MTY4NTQ4MzcyOSwiZXhwIjoxNjg1NTcwMTI5fQ.duO_vK1SMJ3aN1hgaL-8TyPEIU0E92JNg7Axm2T3t3Q
 
 ###
 POST http://localhost:3003/api/users/ HTTP/1.1
