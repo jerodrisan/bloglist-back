@@ -8,11 +8,11 @@ blogsRouter.get('/', async(request, response) => {
 
     //const blogs = await Blog.find({})
     const blogs = await Blog.find({}).populate('user', { username: 1, name:1 }) //en este caso usamos en el esquema 
-    //Sin salida formateada:
-    //response.json(blogs)    
-    //Si queremos ver la salida formateada:     
-    let str = jsonFormatter(blogs)    
-    response.send(str)    
+    //Sin salida formateada y para uso en el front:
+    response.json(blogs)    
+    //Si queremos ver la salida formateada y sin poder usar en el front:    
+   // let str = jsonFormatter(blogs)    
+   //response.send(str)    
   })
 
 
