@@ -13,15 +13,15 @@ loginRouter.post('/', async (request, response) => {
     const user = await User.findOne({ username })
     const passwordCorrect = user === null ? false  : await bcrypt.compare(password, user.passwordHash)  
     if (!(user && passwordCorrect)) {
-      return response.status(401).json({
-        error: 'invalid username or password'
-      })
+      return response.status(401).json({error: 'invalid username or password'})
     }  
     const userForToken = {
       username: user.username,
       id: user._id,
-    }  
-    const token = jwt.sign(userForToken, process.env.SECRET, { expiresIn: "24h" })  //hay que establecer en el archivo .env la variable SECRET, una vez expira el token hay que solicitar otro
+    } 
+    //hay que establecer en el archivo .env la variable SECRET, una vez expira el token hay que solicitar otro       
+    const token = jwt.sign(userForToken, process.env.SECRET, { expiresIn: "24h"}) //ponemos el tiempo que queramos
+    //console.log('userfortoken',userForToken, token)
     response
       .status(200)
       .send({ token, username: user.username, name: user.name })

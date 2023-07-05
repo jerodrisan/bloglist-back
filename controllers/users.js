@@ -5,18 +5,21 @@ const User = require('../models/user')
 const jsonFormatter = require('..//utils/formatter')
 
 
+//Obtencion de todos los usuarios con sus respectivos blogs cada uno 
 usersRouter.get('/', async (request, response) => {
     //const users = await User.find({}) //si queremos que salga la relacion por ids
     const users = await User.find({}).populate('blogs')  // si queremos que se vea la relacion por un array usamos populate
     //const users = await User.find({}).populate('blogs', { title: 1, author: 1 })    //si queremos que salgan solo los campos title y author
     response.json(users)
-
     //si lo queremos formateado y solo para ver en el back 
     //let str = jsonFormatter(users)    
     //response.send(str)    
   })
 
 
+
+
+//Nuevo usuario:
 usersRouter.post('/', async (request, response, next) => {
 
   const { username, name, password } = request.body
