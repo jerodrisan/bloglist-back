@@ -4,8 +4,8 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
+//devolucion de todos los blogs
 blogsRouter.get('/', async(request, response) => {     
-
     //const blogs = await Blog.find({})
     const blogs = await Blog.find({}).populate('user', { username: 1, name:1 }) //en este caso usamos en el esquema 
     //Sin salida formateada y para uso en el front:
@@ -16,14 +16,15 @@ blogsRouter.get('/', async(request, response) => {
   })
 
 
-  //devolucion de los blogs de un usuario determinado (no sale)
-  blogsRouter.get('/:username', async(request, response)=>{ 
-    const username = request.params.username
-    console.log(username)
-    const blogs = await Blog.find({"user.username":"root"})
-    console.log(blogs)
-    response.json(blogs)
-
+  //devolucion de los blogs de un usuario determinado 
+  blogsRouter.get('/usuario/:userid', async(request, response)=>{        
+    const userid = request.params.userid
+    //console.log(userid)
+   // const blogs = await Blog.find({"user.username":userid}) //(no sale usando el metodo find de mongodb )
+    const totalBlogs = await Blog.find({})         
+    const userBlogs = totalBlogs.filter(blog=>(blog.user).toString() === userid ) 
+    response.json(userBlogs)
+    
   })
 
 
@@ -31,7 +32,7 @@ blogsRouter.get('/', async(request, response) => {
   //comprobacion de token expirado o invalido
   blogsRouter.get('/:token', async(request, response) => {
       const token = request.params.token
-      console.log('this is the token ', token)
+      //console.log('this is the token ', token)      
       try{
         const decodedToken = jwt.verify(token, process.env.SECRET)
         if (!decodedToken.id) {         
@@ -40,10 +41,10 @@ blogsRouter.get('/', async(request, response) => {
         const user = await User.findById(decodedToken.id) //pillamos el usuario cuya id se encuentra identificada en el token  
         console.log(user)
         return response.json(user)
-
       }catch(error){      
           return response.json({error: error.name })      
       } 
+      
   })
   
 
@@ -88,7 +89,7 @@ blogsRouter.get('/', async(request, response) => {
         const savedBlog = await new Blog(blog).save()//guardamos el blog 
         user.blogs = user.blogs.concat(savedBlog._id) //metemos la id del blog en el usuario y lo guardamos
         await user.save()
-        response.status(201).json(savedBlog) //devuelve el contacto guardado.      
+        response.status(201).json(savedBlog) //devuelve el blog guardado.      
      }catch(error){
         console.log('este es el error',error)
         next(error)//sacamos el error del JsonWebTokenError en caso de que sea erroneo

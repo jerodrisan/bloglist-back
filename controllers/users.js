@@ -23,7 +23,6 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.post('/', async (request, response, next) => {
 
   const { username, name, password } = request.body
-
   if(!(request.body).hasOwnProperty('password') || password ==='' ) {
       response.status(400).json({error:"empty password or missing password"})
   }else {
@@ -44,12 +43,8 @@ usersRouter.post('/', async (request, response, next) => {
         next(error)
       } 
     }
-  }
- 
+  } 
 })
-
-
-
 
 
 module.exports = usersRouter

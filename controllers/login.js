@@ -20,11 +20,11 @@ loginRouter.post('/', async (request, response) => {
       id: user._id,
     } 
     //hay que establecer en el archivo .env la variable SECRET, una vez expira el token hay que solicitar otro       
-    const token = jwt.sign(userForToken, process.env.SECRET, { expiresIn: "24h"}) //ponemos el tiempo que queramos
+    const token = jwt.sign(userForToken, process.env.SECRET, { expiresIn: "24h"}) //ponemos el tiempo que queramos ej: expiresIn: "24h". El tiempo viene en segundos
     //console.log('userfortoken',userForToken, token)
     response
       .status(200)
-      .send({ token, username: user.username, name: user.name })
+      .send({ token, username: user.username, name: user.name, userid:user._id })
   })
   
   module.exports = loginRouter

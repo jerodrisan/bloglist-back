@@ -35,32 +35,32 @@ Content-Type: application/json
 {
     "username": "pepe",
     "name": "Jose Perez",
-    "password":"ffas"  
+    "password":""  
 }
 
 
-###
+### ver username and password en .env
 POST http://localhost:3003/api/login/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "pepe",
-    "password": "pepe99"   
+    "username": "",
+    "password": ""   
 }
 
-### 
+### ver username and password en .env
 POST http://localhost:3003/api/login/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "root",   
-    "password": "salainen"
+    "username": "",   
+    "password": ""
 }
 
 
-### 
+### comprobacion de token expirado o invalido
 GET http://localhost:3003/api/blogs/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlcGUiLCJpZCI6IjY0NmY5ODQwMTdiNGI4YmMxYTRiZTU2NiIsImlhdCI6MTY4NTc0OTMyMiwiZXhwIjoxNjg1ODM1NzIyfQ.S9umieCRSBzBZ2eMmAPwjyP0eh2HDRBPdO_Zp4JDAG4
 
 
-### 
-Get http://localhost:3003/api/blogs/pepe
+### devolucion de los blogs de un usuario determinado
+Get http://localhost:3003/api/blogs/usuario/646f984017b4b8bc1a4be566
